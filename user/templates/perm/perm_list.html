@@ -1,0 +1,76 @@
+
+
+        {% extends 'setting/setting_layout.html' %}
+        {% block setting_block %}
+
+                <div class="table-responsive">
+                                    <div class="table-responsive">
+                                    <table id="example" class="table tbl table-striped table-bordered second" style="width:100%">
+                                       <thead>
+                                            <tr>
+                                                <th>SN</th>
+                                                <th>Name</th>
+                                                <th>Desc</th>
+                                                <th>Module</th>
+                                                <th>Action</th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for li in lists %}
+                                            <tr>
+                                                <th scope="row">{{forloop.counter}}</th>
+                                                <td>{{li.perm_name}}</td>
+                                                <td>{{li.perm_desc}}</td>
+                                                <td>{{li.module}}</td>
+                                                <td>
+                                                    <!--
+                                                     <a href="{% url 'update_permission' pk=li.id %}"> <i class="fa fa-edit fa-1x"></i></a>
+                                                     <a href="javascript:;" onclick="confirm_modal('{% url 'update_permission' pk=li.id %}');"  > <i class="fa fa-trash fa-1x"></i></a>
+                                                    -->
+
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+
+                                    </table>
+                                </div>
+                                </div>
+               {% endblock %}
+
+               {% block js %}
+              <script type="text/javascript">
+                $(document).ready(function() {
+                    $('.tbl').DataTable( {
+                    destroy: true,
+                    ordering:false,
+                    paging:false,
+
+                    dom: 'Bfrtip',
+
+                    buttons: [
+                      {
+                                text: '+New',
+                                className: 'orange, btn btn-primary',
+                                 action: function (e, dt, node, config)
+                                    {
+                                     window.location.href = "{% url 'new_permission' %}";
+
+                                    }
+                            }
+
+                    ]
+                } );
+                });
+            </script>
+            {% endblock %}
+
+
+
+
+
+
+
+
+
+

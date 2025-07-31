@@ -1,0 +1,55 @@
+from xmlrpc.client import boolean
+from django.db import models
+import uuid
+
+# Create your models here.
+
+class BaseDBNormal(models.Model):
+    #id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    is_active = models.BooleanField(default=True)
+    created_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_on = models.DateTimeField(auto_now=True, null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+class BaseDB(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    is_active = models.BooleanField(default=True)
+    created_by = models.ForeignKey("user.User", on_delete=models.CASCADE, null=True, blank=True)
+    created_on = models.DateTimeField(auto_now_add=True, null=True, blank=True)
+    updated_on = models.DateTimeField(auto_now=True, null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+class TimeSettings(BaseDB):
+    chargeAmount=models.FloatField()
+    minimumTime=models.FloatField()
+    maximumTime=models.FloatField()
+    def __str__(self):
+        return str(self.minimumTime)+'-'+str(self.maximumTime)+'-'+str(self.chargedAmount)
+
+
+
+class Parking(BaseDB):
+    cardName=models.CharField(max_length=300)
+    def __str__(self):
+        return self.cardName
+
+
+class ParkingBill(BaseDB):
+    billedAmount = models.FloatField(null=True)
+    timespentInMinutes = models.FloatField(null=True)
+    parking= models.ForeignKey(
+        Parking, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.paidAmount
+
+
+class Payment(BaseDB):
+    paidAmount = models.FloatField(null=True)
+    parking= models.ForeignKey(ParkingBill, on_delete=models.CASCADE)
+    def __str__(self):
+        return self.paidAmount

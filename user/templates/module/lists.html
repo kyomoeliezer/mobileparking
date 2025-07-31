@@ -1,0 +1,72 @@
+
+
+        {% extends 'setting/setting_layout.html' %}
+        {% block setting_block %}
+
+                <div class="table-responsive">
+                                    <div class="table-responsive">
+                                    <table id="example" class="table tbl second" style="width:100%">
+                                       <thead>
+                                            <tr>
+                                                <th style="width:6%;">SN</th>
+                                                <th>Name</th>
+
+                                                <th style="width:10%;">Action</th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for li in lists %}
+                                            <tr>
+                                                <th scope="row">{{forloop.counter}}</th>
+                                                <td>{{li.name}}</td>
+                                                <td>
+                                                    <!--
+                                                     <a href="{% url 'update_module' pk=li.id %}"> <i class="fa fa-edit fa-1x"></i></a>
+                                                     <a href="javascript:;" onclick="confirm_modal('{% url 'delete_module' pk=li.id %}');"  > <i class="fa fa-trash fa-1x"></i></a>
+
+                                                    -->
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+
+                                    </table>
+                                </div>
+                                </div>
+               {% endblock %}
+
+               {% block js %}
+              <script type="text/javascript">
+                $(document).ready(function() {
+                    $('.tbl').DataTable( {
+                    destroy: true,
+                    ordering:false,
+
+                    dom: 'Bfrtip',
+
+                    buttons: [
+                       /*{
+                                text: '+New',
+                                className: 'orange, btn btn-primary',
+                                 action: function (e, dt, node, config)
+                                    {
+                                     window.location.href = "{% url 'new_module' %}";
+
+                                    }
+                            }*/
+
+                    ]
+                } );
+                });
+            </script>
+            {% endblock %}
+
+
+
+
+
+
+
+
+
+
