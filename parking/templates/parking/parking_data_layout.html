@@ -1,0 +1,64 @@
+
+        {% extends 'master.html' %}
+            {% load static %}
+             {% load humanize %}
+            {% block breadcab %}
+                        <div class="page-header">
+                            <h2 class="pageheader-title">{{header|title}}</h2>
+                            <p class="pageheader-text"> </p>
+
+                        </div>
+          {% endblock %}
+            {% block content %}
+
+          <!-- ============================================================== -->
+                    <!-- data table  -->
+                    <!-- ============================================================== -->
+                    <div class="col-xl-10 col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="card">
+
+                            <div class="card-body">
+                                {% block setting_block %}
+
+                                {% endblock %}
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ============================================================== -->
+                    <!-- end data table  -->
+                    <!-- ============================================================== -->
+        <!-- ============================================================== -->
+                    <!-- sidenavbar -->
+                    <!-- ============================================================== -->
+                    <div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-12">
+                        <div class="sidebar-nav-fixed">
+                            <ul class="list-unstyled">
+                                <li><a href="#overview" class="active">Menu</a></li>
+
+                                <li><a href="{% url 'parking_lists' %}">Current Parking</a></li>
+                                <li><a href="{% url 'parking_billing' %}">Billings</a></li>
+                                <li><a href="{% url 'payment_lists' %}">Payments</a></li>
+
+
+
+
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- ============================================================== -->
+                    <!-- end sidenavbar -->
+                    <!-- ============================================================== -->
+
+
+            {% endblock %}
+
+
+
+
+
+
+
+
+
+

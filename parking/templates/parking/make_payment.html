@@ -1,0 +1,79 @@
+
+
+        {% extends 'parking/parking_data_layout.html' %}
+        {% load crispy_forms_tags %}
+        {% load humanize %}
+        {% block setting_block %}
+
+                <div class="col-md-12 row">
+                  <div class="col-md-6">
+                     <table class="table">
+                      <tr>
+                        <th>Car Number: </th>
+                      <th>{{bill.parking.cardName}}</th>
+                      </tr>
+                      <tr>
+                        <th>Entrace Time: </th>
+                      <th>{{bill.parking.created_on}}</th>
+                      </tr>
+                      <tr>
+                        <th>Exit/Billing Time: </th>
+                      <th>{{bill.created_on}}</th>
+                      </tr>
+                       <tr>
+                        <th> Minute(s): </th>
+                      <th>{{bill.timespentInMinutes}}</th>
+                      </tr>
+                       <tr>
+                        <th>Billing Amount: </th>
+                      <th>{{bill.billedAmount|floatformat:2|intcomma:2}}</th>
+                      </tr>
+
+                    </table>
+                  </div>
+                  <div class="col-md-6">
+                     <table class="table">
+                         <tr>
+                             <th colspan="2"><form method="post" >{% csrf_token %}</th>
+                         </tr>
+                      <tr>
+                        <th><span class="text-black"> PAID AMOUNT: </span></th>
+                      <th>
+                        <div id="div_id_cardName" class="form-group">
+
+
+                                    <div>
+                                                <input type="text" name="amount" readonly="readonly" value="{{bill.billedAmount}}" class="textinput form-control" required id="id_cardName">
+
+                                    </div>
+
+                      </div>
+
+                      </th>
+                      </tr>
+                      <tr>
+                        <th></th>
+                        <th colspan="1"><button class="btn btn-warning">MAKE PAYMENT</button> </th>
+                      </tr>
+                         <tr>
+                             <th colspan="2"></form></th>
+                         </tr>
+
+
+                    </table>
+                  </div>
+
+                </div>
+
+               {% endblock %}
+
+
+
+
+
+
+
+
+
+
+

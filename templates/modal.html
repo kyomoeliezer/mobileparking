@@ -65,6 +65,14 @@ function confirm_modal(delete_url)
         jQuery('#modal_delete').modal('show', {backdrop: 'static'});
         document.getElementById('modal_delete_last').setAttribute('href' , delete_url);
     }
+
+function confirm_billing(delete_url)
+    {
+        jQuery('#modal_billing').modal('show', {backdrop: 'static'});
+        document.getElementById('modal_billing_href').setAttribute('href' , delete_url);
+    }
+
+
 function confirm_post(delete_url)
     {
         jQuery('#modal_post').modal('show', {backdrop: 'static'});
@@ -487,6 +495,21 @@ function wamepewa_modal(url,kiasi)
                 <div class="modal-body" style="text-align: center;">
                     <p>We are modifying IT</p>
                     <!--<a href="" class="btn btn-danger" id="modal_post_last" style="text-align: center;">YES</a>-->
+                     <a href="#" class="btn btn-info" data-dismiss="modal" style="text-align: center;">NO</a>
+                </div>
+            </div>
+        </div>
+    </div>
+ <div class="modal fade" id="modal_billing" data-backdrop="false">
+        <div class="modal-dialog" >
+            <div class="modal-content" style="margin-top:100px;">
+
+                <div class="modal-header">
+
+                    <h4 class="modal-title" style="text-align:center; color:red;">Do you want to GENERATE BILLING  ?</h4>
+                </div>
+                <div class="modal-body" style="text-align: center;">
+                    <a href="" class="btn btn-danger" id="modal_billing_href" style="text-align: center;">YES</a>
                      <a href="#" class="btn btn-info" data-dismiss="modal" style="text-align: center;">NO</a>
                 </div>
             </div>

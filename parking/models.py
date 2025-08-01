@@ -34,6 +34,7 @@ class TimeSettings(BaseDB):
 
 class Parking(BaseDB):
     cardName=models.CharField(max_length=300)
+    status = models.CharField(max_length=300,null=True)
     def __str__(self):
         return self.cardName
 
@@ -41,6 +42,7 @@ class Parking(BaseDB):
 class ParkingBill(BaseDB):
     billedAmount = models.FloatField(null=True)
     timespentInMinutes = models.FloatField(null=True)
+    status=models.CharField(max_length=200,null=True)
     parking= models.ForeignKey(
         Parking, on_delete=models.CASCADE)
 
@@ -49,7 +51,9 @@ class ParkingBill(BaseDB):
 
 
 class Payment(BaseDB):
+    no=models.IntegerField(null=True)
+    paymentNo=models.CharField(max_length=200,null=True)
     paidAmount = models.FloatField(null=True)
-    parking= models.ForeignKey(ParkingBill, on_delete=models.CASCADE)
+    parkingbill= models.ForeignKey(ParkingBill, on_delete=models.CASCADE)
     def __str__(self):
         return self.paidAmount
