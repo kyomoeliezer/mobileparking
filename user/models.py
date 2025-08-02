@@ -5,7 +5,7 @@ from django.core.files.storage import FileSystemStorage
 import random as r
 from django.db import models
 from django.contrib.auth.models import AbstractUser,AbstractBaseUser
-
+from parking.models import BaseDB
 
 
 class CustPermission(models.Model):
@@ -29,6 +29,7 @@ class User(AbstractUser):
     role=models.ForeignKey(Role,on_delete=models.DO_NOTHING,null=True)
     first_name = models.CharField(max_length=100,blank=True,null=True)
     last_name = models.CharField(max_length=100,blank=True,null=True)
+    full_name=models.CharField(max_length=100,blank=True,null=True)
     mobile=models.CharField(max_length=20,null=True)
     velidate_string=models.CharField(max_length=200, null=True)
     is_validated=models.BooleanField(default=True)
@@ -38,4 +39,21 @@ class User(AbstractUser):
     def name(self):
         return self.username
 
+
+class LoginLog(BaseDB):
+    """Model definition for LoginLog."""
+
+    login_time = models.DateTimeField(auto_now_add=True)
+    logout_time = models.DateTimeField(auto_now=False, null=True, blank=True)
+
+    class Meta:
+        """Meta definition for LoginLog."""
+
+        verbose_name = "LoginLog"
+        verbose_name_plural = "LoginLogs"
+        db_table = "login_log"
+
+    def __str__(self):
+        """Unicode representation of LoginLog."""
+        return self.created_by.username
 

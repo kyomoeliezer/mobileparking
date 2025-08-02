@@ -57,3 +57,14 @@ class Payment(BaseDB):
     parkingbill= models.ForeignKey(ParkingBill, on_delete=models.CASCADE)
     def __str__(self):
         return self.paidAmount
+
+class ParkingRequestLog(models.Model):
+    created_on = models.DateTimeField(auto_now_add=True)
+    method = models.CharField(max_length=50, null=True)
+    originate_from_ip = models.CharField(max_length=50, null=True)
+    query_raw = models.TextField(null=True)
+    our_response_raw = models.TextField(null=True)
+    is_authentication = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.method

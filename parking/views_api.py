@@ -19,9 +19,21 @@ from parking.models import *
 from parking.forms import *
 from zoneinfo import ZoneInfo
 
+def visitor_ip_address(request):
+
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
+
+
+
 
 class ParkingApi:
-    def receive_car_data(request, rcv_schema):
+    def go_car_data(request, rcv_schema):
         if type(rcv_schema) != "dict":
             rcv_schema = rcv_schema.dict()
         print(rcv_schema)
@@ -31,20 +43,55 @@ class ParkingApi:
 
         cardName = None,
         data_respo={}
+        action='in'
+        vehicleNo=None
 
-        if 'cardName' in rcv_schema.keys():
-            cardName = rcv_schema['cardName']
-            print('cardName')
-            print(cardName)
-            if not cardName:
-                datalog.our_response_raw = 'Validation Error: cardName must not be empty or None'
+        if 'vehicleNo' in rcv_schema.keys():
+            vehicleNo = rcv_schema['vehicleNo'].strip()
+            print('vehicleNo')
+            print(vehicleNo)
+            if not vehicleNo:
+                datalog.our_response_raw = 'Validation Error: vehicleNo must not be empty or None'
                 datalog.save()
-                raise HttpError(400, 'Validation Error: cardName must not be empty or None')
+                raise HttpError(400, 'Validation Error: vehicleNo must not be empty or None')
 
 
-            return data_respo
+        if 'action' in rcv_schema.keys():
+            action = rcv_schema['action'].strip()
+            if not action:
+                action='in'
+
+
+        if 'in' in action:
+            if not Parking.objects.filter(Q(cardName__iexact=vehicleNo)&Q(Q(status__isnull=True)|~Q(status__iexact='paid'))).exists():
+                parkdata=Parking.objects.create(
+                    cardName=vehicleNo
+                )
+                return {
+                    'parked_at': str(parkdata.created_on),
+                    'parking_id': str(parkdata.id),
+                    'billingStatus': str(parkdata.id),
+                    'billingAmount': str(parkdata.id),
+                    'billingAt': str(parkdata.id),
+                    'billingPaymentStatus': str(parkdata.id),
+
+                }
+            else:
+                parkdata=Parking.objects.filter(Q(cardName__iexact=vehicleNo)&Q(Q(status__isnull=True)|~Q(status__iexact='paid'))).first()
+                return {
+                    'parked_at':str(parkdata.created_on),
+                    'parking_id' : str(parkdata.id),
+                    'billingStatus' : str(parkdata.id),
+                    'billingAmount': str(parkdata.id),
+                    'billingAt': str(parkdata.id),
+                    'billingPaymentStatus': str(parkdata.id),
+
+                }
+
+
+
         else:
-            datalog.our_response_raw = 'Failed with '+str(dataKyc.latestError)
+            datalog.our_response_raw = 'Failed please insert  the correct car number'
             datalog.save()
-            raise HttpError(400, 'Failed with '+str(dataKyc.latestError))
+            raise HttpError(400, ' '+str('Failed please insert  the correct car number'))
 
