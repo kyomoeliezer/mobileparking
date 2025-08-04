@@ -27,7 +27,7 @@ urlpatterns = [
     path("api/", api.urls),
     path('auth/', include('django.contrib.auth.urls')),
     path('users/',include('user.urls')),
-    path('parking',include('parking.urls')),
+    path('',include('parking.urls')),
 ]
 if settings.DEBUG:  # new
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
