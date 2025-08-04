@@ -1,0 +1,65 @@
+
+        {% extends 'master.html' %}
+                {% load crispy_forms_tags %}
+            {% load static %}
+
+
+            {% block breadcab %}
+
+                    <div class="col-sm-8">
+                        <div class="page-header float-left">
+                            <div class="page-title">
+                                <ol class="breadcrumb text-right">
+                                    <li><a href="#">Role</a></li>
+                                    <li><a href="#">New Role</a></li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+          {% endblock %}
+            {% block content %}
+            <div class="row">
+
+                <div class="col-lg-12">
+                    <div class="card card-info">
+
+                        <div class="card-body card-block">
+
+                                <!--TABLE-->
+                                <div class="card-header text-white" style="background-color: #007bff;">
+                                   <strong class="card-title">{{header|upper}}</strong>
+                                </div>
+                            <div class="card-body">
+                                {% if form.errors %}
+                            <div id="errors">
+                                <div class="inner">
+                                    <p>There were some errors in the information you entered. Please correct the following:</p>
+                                    {{ form.non_field_errors }}
+                                    <ul>
+                                        {% for field in form %}
+                                            {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                            {% endif %}
+                                 <form class="forms-sample" method="post">{% csrf_token %}
+                                     <div class="form-group row">
+                                      <div class="col">
+                                        {{form.name|as_crispy_field}}
+                                      </div>
+                                      <div class="col">
+                                        {{form.code|as_crispy_field}}
+                                      </div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary mr-2"> Save </button>
+                                      <a href="{% url 'roles' %}" class="btn btn-light">Cancel</a>
+                                    </form>
+                                <!--END TABLE -->
+                            </div>
+                            </div>
+                    </div>
+                </div>
+
+            </div>
+            {% endblock %}

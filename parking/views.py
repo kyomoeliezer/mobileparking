@@ -16,6 +16,7 @@ from django.contrib import messages
 from parking.models import *
 from parking.forms import *
 from zoneinfo import ZoneInfo
+from carparking.settings import TIME_ZONE
 
 
 class CurrentParkingList(LoginRequiredMixin,View):
@@ -80,15 +81,22 @@ class ParkingDelete(LoginRequiredMixin,View):
     login_url = reverse_lazy('login_user')
 
     def get(self,*args,**kwargs):
-        Parking.objects.filter(id=self.kwargs['pk']).delete()
+        try:
+            messages.success(self.request,'deleted object')
+            Parking.objects.filter(id=self.kwargs['pk']).delete()
+        except:
+            messages.warning(self.request, 'Failed to delete the objects')
+
+
         return redirect(reverse('parking_lists'))
 
 
 def create_bill(request,parkingId):
+    nowTime = datetime.datetime.now()
     dataParking = Parking.objects.filter(id=parkingId).first()
     if not ParkingBill.objects.filter(parking_id=dataParking.id).exists():
         dataTime = round(
-            (datetime.datetime.now(ZoneInfo('Africa/Dar_es_Salaam')) - dataParking.created_on).total_seconds() / 60)
+            (nowTime - dataParking.created_on).total_seconds() / 60)
         if TimeSettings.objects.filter(minimumTime__lte=dataTime, maximumTime__gte=dataTime).exists():
             obj = \
             TimeSettings.objects.filter(minimumTime__lte=dataTime, maximumTime__gte=dataTime).order_by('-created_on')[0]
@@ -110,7 +118,8 @@ class GenerateParking(LoginRequiredMixin,View):
     def get(self,*args,**kwargs):
         dataParking=Parking.objects.filter(id=self.kwargs['pk']).first()
         if not  ParkingBill.objects.filter(parking_id=dataParking.id).exists():
-            dataTime=round((datetime.datetime.now(ZoneInfo('Africa/Dar_es_Salaam'))-dataParking.created_on).total_seconds()/60)
+            nowTime = datetime.datetime.now()
+            dataTime=round((nowTime-dataParking.created_on).total_seconds()/60)
             if TimeSettings.objects.filter(minimumTime__lte=dataTime,maximumTime__gte=dataTime).exists():
                 obj=TimeSettings.objects.filter(minimumTime__lte=dataTime, maximumTime__gte=dataTime).order_by('-created_on')[0]
                 ParkingBill.objects.create(
@@ -275,5 +284,27 @@ class PaymentLists(LoginRequiredMixin,View):
 
         return render(request,self.template_name,context)
 
+class RecognizePlate(View):
+    def get(self,request,*args,**kwargs):
+        import simplelpr
 
+        # Initialize the engine
+        setup_params = simplelpr.EngineSetupParms()
+        engine = simplelpr.SimpleLPR(setup_params)
+
+        # Configure for your country (e.g., UK = 90)
+        engine.set_countryWeight(90, 1.0)
+        engine.realizeCountryWeights()
+
+        # Create a processor
+        processor = engine.createProcessor()
+
+        # Analyze an image
+        candidates = processor.analyze("imagespark/plate3.jpg")
+
+        # Print results
+        for candidate in candidates:
+            for match in candidate.matches:
+                print(f"Plate: {match.text}")
+                print(f"Confidence: {match.confidence:.3f}")
 

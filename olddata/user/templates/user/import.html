@@ -1,0 +1,48 @@
+{% extends 'main_layout.html' %}
+{% block body_block %}
+{% load crispy_forms_tags %}
+
+       <div class="page-header">
+			  <h3 class="page-title">{{header|upper}}</h3>
+              <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="#">User</a></li>
+                  <li class="breadcrumb-item active" aria-current="page"> New Role </li>
+                </ol>
+              </nav>
+            </div>
+            <div class="row">
+              <div class="col-md-8 grid-margin stretch-card">
+                <div class="card">
+                  <div class="card-body">
+                       {% if form.errors %}
+                            <div id="errors">
+                                <div class="inner">
+                                    <p>There were some errors in the information you entered. Please correct the following:</p>
+                                    {{ form.non_field_errors }}
+                                    <ul>
+                                        {% for field in form %}
+                                            {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                    <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+                     <div class="form-group row">
+                      <div class="col">
+                        {{form.file|as_crispy_field}}
+                      </div>
+
+                    </div>
+
+
+
+                      <button type="submit" class="btn btn-primary mr-2"> Save </button>
+                      <a href="{% url 'roles' %}" class="btn btn-light">Cancel</a>
+                    </form>
+                  </div>
+                </div>
+              </div>
+             {% endblock %}

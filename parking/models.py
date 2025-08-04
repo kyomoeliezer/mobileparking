@@ -1,5 +1,6 @@
 from xmlrpc.client import boolean
 from django.db import models
+from django.utils.timezone import localtime
 import uuid
 
 # Create your models here.
@@ -23,6 +24,9 @@ class BaseDB(models.Model):
     class Meta:
         abstract = True
 
+    def get_local_created_on(self):
+        return localtime(self.created_on)
+
 class TimeSettings(BaseDB):
     chargeAmount=models.FloatField()
     minimumTime=models.FloatField()
@@ -33,6 +37,8 @@ class TimeSettings(BaseDB):
 
 
 class Parking(BaseDB):
+    no=models.IntegerField(default=0)
+    park_no=models.CharField(max_length=300,null=True)
     cardName=models.CharField(max_length=300)
     status = models.CharField(max_length=300,null=True)
     def __str__(self):
@@ -44,17 +50,17 @@ class ParkingBill(BaseDB):
     timespentInMinutes = models.FloatField(null=True)
     status=models.CharField(max_length=200,null=True)
     parking= models.ForeignKey(
-        Parking, on_delete=models.CASCADE)
+        Parking, on_delete=models.PROTECT)
 
     def __str__(self):
-        return self.paidAmount
+        return str(self.billedAmount)
 
 
 class Payment(BaseDB):
     no=models.IntegerField(null=True)
     paymentNo=models.CharField(max_length=200,null=True)
     paidAmount = models.FloatField(null=True)
-    parkingbill= models.ForeignKey(ParkingBill, on_delete=models.CASCADE)
+    parkingbill= models.ForeignKey(ParkingBill, on_delete=models.PROTECT)
     def __str__(self):
         return self.paidAmount
 

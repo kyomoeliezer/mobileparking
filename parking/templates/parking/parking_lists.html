@@ -37,6 +37,7 @@
                                       <thead>
                                             <tr>
                                                <th>SN</th>
+                                                <th>ParkNo</th>
                                                 <th>Plate No</th>
                                                  <th>Arrived At</th>
                                                 <th>Dispatched At</th>
@@ -50,6 +51,7 @@
                                                 {% for li in lists %}
                                             <tr>
                                                 <th scope="row">{{forloop.counter}}</th>
+                                                <td>{{li.park_no}}</td>
                                                 <td>{{li.cardName}}</td>
                                                 <td>{{li.created_on}}</td>
                                                 <td>{% disparted_at li.id %}</td>

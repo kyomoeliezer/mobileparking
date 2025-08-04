@@ -100,7 +100,7 @@ WSGI_APPLICATION = 'carparking.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': BASE_DIR / 'db2.sqlite3',
     }
 }
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
@@ -136,8 +136,8 @@ TIME_ZONE = 'Africa/Dar_es_Salaam'
 
 USE_I18N = True
 
-USE_TZ = True
-
+USE_TZ = False
+DATA_UPLOAD_MAX_MEMORY_SIZE = 52428800
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/

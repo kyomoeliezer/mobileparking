@@ -6,7 +6,7 @@ from user.roles import YouDontHavePermission
 urlpatterns=[
     
 
-    url(r'^current-parking$', CurrentParkingList.as_view(),name='parking_lists'),
+
     url(r'^new-parking$', NewCarPark.as_view(),name='new_parking'),
     url(r'^(?P<pk>[\w-]+)/deleteparking$', ParkingDelete.as_view(),name='delete_parking'),
     url(r'^(?P<pk>[\w-]+)/generate-billing', GenerateParking.as_view(),name='generate_billing'),
@@ -16,6 +16,9 @@ urlpatterns=[
 
     url(r'^parking-billing$', ParkingBilling.as_view(),name='parking_billing'),
     url(r'^paymentlists$', PaymentLists.as_view(),name='payment_lists'),
+    url(r'^testImage', RecognizePlate.as_view(),name='testData'),
+    url(r'^$', CurrentParkingList.as_view(),name='parking_lists'),
+
 
 
 

@@ -7,5 +7,8 @@ from typing import List
 
 class CarParkRequestSchema(Schema):
     vehicleNo: str = '' or None
+    action:str ='' or None
+    image: str = '' or None
+    ext:str = '' or None
 
 
