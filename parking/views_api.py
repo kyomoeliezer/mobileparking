@@ -64,50 +64,50 @@ class ParkingApi:
         datalog = ParkingRequestLog.objects.create(
             method=request.method, query_raw=request.body,
             originate_from_ip=visitor_ip_address(request))
-        try:
-            image = base64.b64decode(rcv_schema['image'], validate=True)
-            file_to_save = "name or path of the file to save,let's say, my_image.png"
-            import simplelpr
-            import random
+        #try:
+        image = base64.b64decode(rcv_schema['image'], validate=True)
+        file_to_save = "name or path of the file to save,let's say, my_image.png"
+        import simplelpr
+        import random
 
-            # Initialize the engine
-            setup_params = simplelpr.EngineSetupParms()
-            engine = simplelpr.SimpleLPR(setup_params)
+        # Initialize the engine
+        setup_params = simplelpr.EngineSetupParms()
+        engine = simplelpr.SimpleLPR(setup_params)
 
-            # Configure for your country (e.g., UK = 90)
-            engine.set_countryWeight(90, 1.0)
-            engine.realizeCountryWeights()
-            file_to_save = "imagespark/"+str(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))+str(random.randint(200,300))+''+str(rcv_schema['ext'])
-            with open(file_to_save, "wb") as f:
-                f.write(image)
-            # Create a processor
-            processor = engine.createProcessor()
+        # Configure for your country (e.g., UK = 90)
+        engine.set_countryWeight(90, 1.0)
+        engine.realizeCountryWeights()
+        file_to_save = "imagespark/"+str(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))+str(random.randint(200,300))+''+str(rcv_schema['ext'])
+        with open(file_to_save, "wb") as f:
+            f.write(image)
+        # Create a processor
+        processor = engine.createProcessor()
 
-            # Analyze an image
-            candidates = processor.analyze(file_to_save)
-            arrayData=[]
-            # Print results
-            print(candidates);
-            for candidate in candidates:
-                for match in candidate.matches:
-                    arrayData.append({
-                        'Plate':match.text,
-                        'Confidence':match.confidence
-                    })
-                    print(f"Plate: {match.text}")
-                    print(f"Confidence: {match.confidence:.3f}")
-            accruracePer=0
-            actual=''
-            if len(arrayData) > 0:
-                actual=accuracyData(arrayData)
-                print('actual')
-                accruracePer=actual['Confidence']
-                print(actual['Plate'])
-                actual=actual['Plate']
-
+        # Analyze an image
+        candidates = processor.analyze(file_to_save)
+        arrayData=[]
+        # Print results
+        print(candidates);
+        for candidate in candidates:
+            for match in candidate.matches:
+                arrayData.append({
+                    'Plate':match.text,
+                    'Confidence':match.confidence
+                })
+                print(f"Plate: {match.text}")
+                print(f"Confidence: {match.confidence:.3f}")
+        accruracePer=0
+        actual=''
+        if len(arrayData) > 0:
+            actual=accuracyData(arrayData)
+            print('actual')
+            accruracePer=actual['Confidence']
+            print(actual['Plate'])
+            actual=actual['Plate']
+        """
         except binascii.Error as e:
             raise HttpError(401,'Tafadhali chukua vizuri picha ya numba za gari')
-
+        """
         if accruracePer < 0.9:
             raise HttpError(401, 'Tafadhali chukua vizuri picha ya numba za gari, number tu ndo zionekane')
 
