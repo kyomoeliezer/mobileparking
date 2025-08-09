@@ -12,3 +12,9 @@ class CarParkRequestSchema(Schema):
     ext:str = '' or None
 
 
+class CarParkRequestConfirmSchema(Schema):
+    image: str = '' or None
+    ext:str = '' or None
+
+
+

@@ -1,4 +1,5 @@
 import datetime
+import os
 from django.shortcuts import render, HttpResponse
 from http.client import HTTPException
 from ninja.errors import HttpError
@@ -57,14 +58,15 @@ def parkNo(no):
 
 
 class ParkingApi:
-    def go_car_data(request, rcv_schema):
+    def car_confirm_plate(request,rcv_schema):
+        #def go_car_data(request, rcv_schema):
         if type(rcv_schema) != "dict":
             rcv_schema = rcv_schema.dict()
         print(rcv_schema)
         datalog = ParkingRequestLog.objects.create(
             method=request.method, query_raw=request.body,
             originate_from_ip=visitor_ip_address(request))
-        #try:
+        # try:
         image = base64.b64decode(rcv_schema['image'], validate=True)
         file_to_save = "name or path of the file to save,let's say, my_image.png"
         import simplelpr
@@ -77,7 +79,8 @@ class ParkingApi:
         # Configure for your country (e.g., UK = 90)
         engine.set_countryWeight(90, 1.0)
         engine.realizeCountryWeights()
-        file_to_save = "imagespark/"+str(datetime.datetime.now().strftime("%Y%m%d-%H%M%S"))+str(random.randint(200,300))+''+str(rcv_schema['ext'])
+        file_to_save = "imagespark/" + str(datetime.datetime.now().strftime("%Y%m%d-%H%M%S")) + str(
+            random.randint(200, 300)) + '' + str(rcv_schema['ext'])
         with open(file_to_save, "wb") as f:
             f.write(image)
         # Create a processor
@@ -85,25 +88,25 @@ class ParkingApi:
 
         # Analyze an image
         candidates = processor.analyze(file_to_save)
-        arrayData=[]
+        arrayData = []
         # Print results
         print(candidates);
         for candidate in candidates:
             for match in candidate.matches:
                 arrayData.append({
-                    'Plate':match.text,
-                    'Confidence':match.confidence
+                    'Plate': match.text,
+                    'Confidence': match.confidence
                 })
                 print(f"Plate: {match.text}")
                 print(f"Confidence: {match.confidence:.3f}")
-        accruracePer=0
-        actual=''
+        accruracePer = 0
+        actual = ''
         if len(arrayData) > 0:
-            actual=accuracyData(arrayData)
+            actual = accuracyData(arrayData)
             print('actual')
-            accruracePer=actual['Confidence']
+            accruracePer = actual['Confidence']
             print(actual['Plate'])
-            actual=actual['Plate']
+            actual = actual['Plate']
         """
         except binascii.Error as e:
             raise HttpError(401,'Tafadhali chukua vizuri picha ya numba za gari')
@@ -111,11 +114,24 @@ class ParkingApi:
         if accruracePer < 0.9:
             raise HttpError(401, 'Tafadhali chukua vizuri picha ya numba za gari, number tu ndo zionekane')
 
-        cardName = None,
-        data_respo={}
-        action='in'
-        vehicleNo=None
-        """
+        dir_name = "imagespark/"
+        test = os.listdir(dir_name)
+
+        for item in test:
+            if not  item.startswith(datetime.datetime.now().strftime("%Y%m%d")):
+                os.remove(os.path.join(dir_name, item))
+        return {
+            'plateNo':actual.replace(" ", "").strip()
+        }
+
+    def go_car_data(request, rcv_schema):
+        if type(rcv_schema) != "dict":
+            rcv_schema = rcv_schema.dict()
+        print(rcv_schema)
+        datalog = ParkingRequestLog.objects.create(
+            method=request.method, query_raw=request.body,
+            originate_from_ip=visitor_ip_address(request))
+
         if 'vehicleNo' in rcv_schema.keys():
             vehicleNo = rcv_schema['vehicleNo'].strip()
             print('vehicleNo')
@@ -125,8 +141,8 @@ class ParkingApi:
                 datalog.save()
                 raise HttpError(400, 'Validation Error: vehicleNo must not be empty or None')
 
-        """
-        vehicleNo=actual.replace(" ", "")
+
+        vehicleNo=vehicleNo.replace(" ", "")
         if 'action' in rcv_schema.keys():
             action = rcv_schema['action'].strip()
             if not action:

@@ -8,6 +8,10 @@ from ninja.files import UploadedFile
 
 api = Router(auth=GlobalAuth())
 
+@api.post("/go-car-park-confirm")
+def car_park_request_confirm(request, card: schemas.CarParkRequestConfirmSchema):
+    return ParkingApi.car_confirm_plate(request, card)
+
 
 @api.post("/go-car-park")
 def car_park_request(request, card: schemas.CarParkRequestSchema):
