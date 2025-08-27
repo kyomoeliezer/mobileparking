@@ -1,0 +1,144 @@
+
+        {% extends 'master.html' %}
+            {% load static %}
+             {% load humanize %}
+        {% load parking_tags %}
+            {% block breadcab %}
+                        <div class="page-header">
+                            <h2 class="pageheader-title">{{header|title}}</h2>
+                            <p class="pageheader-text"> </p>
+
+                        </div>
+          {% endblock %}
+            {% block content %}
+
+          <!-- ============================================================== -->
+                    <!-- data table  -->
+                    <!-- ============================================================== -->
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6">
+                        <div class="card">
+
+                            <div class="card-body">
+
+
+                            <div class="table-responsive">
+                                    <div class="table-responsive">
+                                     <table class="table  table-stripped">
+                                      <thead>
+                                            <tr>
+                                               <th>Today number of parking</th>
+                                               <th>{% if todayParking.ParkingCount %} {{todayParking.ParkingCount}}{% else %} 0 {% endif %}</th>
+                                            </tr>
+                                            <tr>
+                                               <th>Today parking collection</th>
+                                               <th>{% if todayParking.ParkingCollection %} {{todayParking.ParkingCollection|floatformat:2|intcomma:2}}{% else %}  {% endif %}</th>
+                                            </tr>
+                                            <tr>
+                                               <th>This Month parking of parking</th>
+                                               <th>{% if thisMonthParking.ParkingCount %} {{thisMonthParking.ParkingCount}}{% else %}  {% endif %}</th>
+
+                                            </tr>
+                                            <tr>
+                                               <th>This Month Collections</th>
+                                                <th>{% if thisMonthParking.ParkingCollection %} {{thisMonthParking.ParkingCollection|floatformat:2|intcomma:2}}{% else %}  {% endif %}</th>
+
+                                            </tr>
+                                            <tr>
+                                               <th>This Year Collections</th>
+                                               <th>{% if thisYearParking.ParkingCollection %} {{thisYearParking.ParkingCollection|floatformat:2|intcomma:2}}{% else %}  {% endif %}</th>
+
+                                            </tr>
+                                            </thead>
+
+                                  </table>
+                                </div>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6 col-lg-6 col-md-6 col-sm-12 col-6">
+                        <div class="card">
+
+                            <div class="card-body">
+
+
+                            <div class="table-responsive">
+                                    <div class="table-responsive">
+                                    <table class="table tbl table-bordered">
+                                      <thead>
+                                            <tr>
+                                               <th>SN</th>
+                                                <th>NO</th>
+                                                <th>CARNO</th>
+                                                 <th>ENTRANCE</th>
+                                                <th>EXIT</th>
+
+                                                <th>ACTION</th>
+                                                <th>BILLING</th>
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for li in lists %}
+                                            <tr>
+                                                <th scope="row">{{forloop.counter}}</th>
+                                                <td>{{li.park_no}}</td>
+                                                <td>{{li.cardName}}</td>
+                                                <td>{{li.created_on}}</td>
+                                                <td>{% disparted_at li.id %}</td>
+
+                                                <td>
+                                                  <!--   <a href="{% url 'update_fee_settings' pk=li.id %}">  <i class="fa fa-edit"></i></a>-->
+                                                    <a href="{% url 'delete_parking' pk=li.id %}">  <i class="fa fa-trash"></i></a>
+                                                </td>
+                                                <td>
+
+
+                                                    <a href="javascript:;" onclick="confirm_billing('{% url 'pay_bill' pk=li.id %}');" class="btn btn-warning">  <i class="fa fa-credit-card" aria-hidden="true"></i>Make Payment</a>
+
+                                                </td>
+
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                  </table>
+                                </div>
+                                </div>
+
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                    <!-- ============================================================== -->
+                    <!-- end data table  -->
+                    <!-- ============================================================== -->
+        <!-- ============================================================== -->
+                    <!-- sidenavbar -->
+                    <!-- ============================================================== -->
+                    <div class="col-xl-2 col-lg-2 col-md-6 col-sm-12 col-12">
+                        <div class="sidebar-nav-fixed">
+
+                        </div>
+                    </div>
+                    <!-- ============================================================== -->
+                    <!-- end sidenavbar -->
+                    <!-- ============================================================== -->
+
+
+            {% endblock %}
+
+
+
+
+
+
+
+
+
+

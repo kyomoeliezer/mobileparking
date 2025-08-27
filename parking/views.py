@@ -18,6 +18,45 @@ from parking.forms import *
 from zoneinfo import ZoneInfo
 from carparking.settings import TIME_ZONE
 
+### BILLING PAYMENTS
+class BillingDashboard(LoginRequiredMixin,View):
+    redirect_field_name = 'next'
+    login_url = reverse_lazy('login_user')
+    model = Parking
+    context_object_name = 'lists'
+    template_name = 'parking/dashboard.html'
+
+    def get(self,request,*args, **kwargs):
+        context = {}
+
+        dataWare=datetime.datetime.now().date()
+        context['header'] = ' Parking   ' + str(datetime.datetime.now().date())+']'
+        context['lists'] = Parking.objects.filter(created_on__date=dataWare).order_by(
+            '-created_on')[:10]
+        context['todayParking'] = Payment.objects.filter(created_on__date=dataWare).aggregate(
+            ParkingCount=Count('id',distinct=True),
+            ParkingCollection=Sum('paidAmount'),
+
+        )
+        context['thisMonthParking'] = Payment.objects.filter(created_on__date__month=dataWare.month,created_on__date__year=dataWare.year).aggregate(
+            ParkingCount=Count('id', distinct=True),
+            ParkingCollection=Sum('paidAmount'),
+
+        )
+        context['thisYearParking'] = Payment.objects.filter(
+                                                             created_on__date__year=dataWare.year).aggregate(
+            ParkingCount=Count('id', distinct=True),
+            ParkingCollection=Sum('paidAmount'),
+
+        )
+
+        #return HttpResponse(context)
+
+        return render(request,self.template_name,context)
+
+
+
+
 
 class CurrentParkingList(LoginRequiredMixin,View):
     redirect_field_name = 'next'

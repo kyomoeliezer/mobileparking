@@ -17,7 +17,9 @@ urlpatterns=[
     url(r'^parking-billing$', ParkingBilling.as_view(),name='parking_billing'),
     url(r'^paymentlists$', PaymentLists.as_view(),name='payment_lists'),
     url(r'^testImage', RecognizePlate.as_view(),name='testData'),
-    url(r'^$', CurrentParkingList.as_view(),name='parking_lists'),
+
+    url(r'^currentParking$', CurrentParkingList.as_view(),name='parking_lists'),
+    url(r'^$', BillingDashboard.as_view(),name='dashboard'),
 
 
 
