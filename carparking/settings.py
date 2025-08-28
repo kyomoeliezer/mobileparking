@@ -29,7 +29,7 @@ BASE_DIR1 = Path(__file__).resolve().parent.parent
 env = environ.Env()
 # reading .env file
 #environ.Env.read_env(os.path.join(BASE_DIR, ".env.dev"))
-environ.Env.read_env(os.path.join(BASE_DIR, "._demo_env.dev"))
+environ.Env.read_env(os.path.join(BASE_DIR, ".demo_env.dev"))
 
 
 # Quick-start development settings - unsuitable for production
