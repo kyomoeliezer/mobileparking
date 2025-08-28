@@ -29,7 +29,7 @@ urlpatterns=[
     ###PERMIS
     url(r'^perm-required$', PermissionRequired.as_view(),name='permission_required'),
     url(r'^permissions$', PermissionsList.as_view(),name='permissions'),
-    url(r'^new-permission$', import_roles,name='new_permission'),
+    url(r'^new-permission$',import_roles,name='new_permission'),
     url(r'^permission/(?P<pk>[0-9]+)/update$', UpdatePermission.as_view(),name='update_permission'),
     url(r'^permission/(?P<pk>[0-9]+)/delete$', PermissionDelete.as_view(),name='delete_permission'),
     ####FEES SETTINGS
