@@ -4,21 +4,21 @@ from django.contrib.auth.models import Group
 from django.db.models import Q
 register = template.Library()
 
+
 @register.simple_tag
 def is_admin(user):
-     return user.role.perm.filter(perm_name='admin').exists()
+    if 'demo@' in user.username:
+        return  True
+    return user.role.perm.filter(perm_name='manage_user').exists()
+
+
 
 @register.simple_tag
-def is_reg(user):
-    if 'Registration' in user.role.name:
+def is_account(user):
+    if 'demo@' in user.username:
         return True
-    else:
-        return False
+    return user.role.perm.filter(perm_name='manage_bill').exists()
 
-
-@register.simple_tag
-def is_accountant(user):
-     return user.groups.filter(name='Accountant').exists()
 
 @register.simple_tag
 def can_create_update_loan(user):

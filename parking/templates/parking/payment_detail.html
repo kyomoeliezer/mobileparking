@@ -5,7 +5,7 @@
         {% load humanize %}
         {% block setting_block %}
 
-                <div class="col-md-12 row">
+                <div class="col-md-12 row" id="GFG">
                   <div class="col-md-6">
                      <table class="table">
                       <tr>
@@ -53,8 +53,37 @@
                   </div>
 
                 </div>
+        <div class="col-md-12" ><button class="btn btn-info" onclick="printDiv();">Print</button> </div>
 
                {% endblock %}
+         {% block js %}
+            <script>
+        function printDiv() {
+            let divContents = document.getElementById("GFG").innerHTML;
+            let printWindow = window.open('', '', 'height=500, width=500');
+            printWindow.document.open();
+            printWindow.document.write(`
+                <html>
+                <head>
+                    <title>{{bill.parking.cardName}} PARKING BILL</title>
+                    <style>
+                        body { font-family: Arial, sans-serif; }
+                        table { width: 100%; border-collapse: collapse; }
+                        th, td { border: 1px solid #ddd; padding: 8px; }
+                        th { background-color: #f4f4f4; }
+                    </style>
+                </head>
+                <body>
+                    <h1>{{bill.parking.cardName}} PARKING BILL</h1>
+                    ${divContents}
+                </body>
+                </html>
+            `);
+            printWindow.document.close();
+            printWindow.print();
+        }
+    </script>
+        {% endblock %}
 
 
 

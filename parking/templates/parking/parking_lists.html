@@ -3,7 +3,13 @@
         {% extends 'parking/parking_data_layout.html' %}
         {% load crispy_forms_tags %}
          {% load parking_tags %}
+         {% load roles_tags %}
+
         {% block setting_block %}
+        {%  is_admin  request.user as am_admin %}
+        {%  is_account  request.user as am_account %}
+
+
                 <div class="col-md-12">
                     <div class="col-md-12">
                             <form action="" method="post" enctype="multipart/form-data">
@@ -62,8 +68,12 @@
                                                 </td>
                                                 <td>
 
-
+                                                    {% if am_account %}
+                                                    {%  paid_parking li.id as PAID %}
+                                                    {% if not PAID %}
                                                     <a href="javascript:;" onclick="confirm_billing('{% url 'pay_bill' pk=li.id %}');" class="btn btn-warning">  <i class="fa fa-credit-card" aria-hidden="true"></i>Make Payment</a>
+                                                    {% endif %}
+                                                    {% endif %}
 
                                                 </td>
 

@@ -1,6 +1,8 @@
 
         {% extends 'setting/setting_layout.html' %}
         {% block setting_block %}
+        {% load roles_tags %}
+        {%  is_admin  request.user as am_admin %}
 
                 <div class="table-responsive">
                                     <div class="table-responsive">
@@ -24,10 +26,11 @@
 
                                                 <td>{% for per in li.perm.all %}{{ per }},<br/>{% endfor %}</td>
                                                 <td>
+                                                    {% if am_admin %}
                                                    
                                                      <a href="{% url 'update_role' li.id %}"> <i class="fa fa-edit text-info"></i></a>
                                                      <a href="{% url 'delete_role' li.id %}"> <i class="fa fa-trash text-danger"></i></a>
-                                                  
+                                                  {% endif %}
 
                                             </tr>
                                             {% endfor %}

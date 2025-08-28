@@ -1,4 +1,6 @@
 from django.utils.decorators import method_decorator
+
+from user.common import send_Email
 from user.decorators import *
 from django.views.generic import CreateView,ListView,UpdateView,View,FormView,DeleteView
 from django.shortcuts import redirect,reverse,resolve_url,render,HttpResponse
@@ -17,8 +19,9 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from django.contrib import messages
 from parking.models import *
-
-
+import csv
+from django.core.files.storage import FileSystemStorage
+from user.common import *
 from user.models import Role,User,CustPermission
 from django.template.loader import render_to_string
 # Create your views here.
@@ -270,6 +273,7 @@ class PermissionRequired(LoginRequiredMixin,View):
 deco=[manage_setting,]
 @method_decorator(deco,name='dispatch')
 class NewUser(LoginRequiredMixin,CreateView):
+
     redirect_field_name = 'next'
     login_url = reverse_lazy('login_user')
     model =User
@@ -299,7 +303,8 @@ class NewUser(LoginRequiredMixin,CreateView):
                     'password':request.POST.get('cpassword'),
                     'user':user,
                     })
-                send_mail(request.POST.get('email'), subject, message)
+
+                send_Mmail(request.POST.get('email'), subject, message)
                 return redirect('users')
             else:
                 return render(request,self.template_name,{'form':form,'header':self.header,'error':'Password Do not Match'})
@@ -481,3 +486,35 @@ class FeeSettingList(LoginRequiredMixin,ListView):
 
 ###END FEE SETTINGS###########################
 ######MODULE###############################
+def import_roles(request):
+    fs=FileSystemStorage(location='import/permission/')
+    file_name='perm.csv'
+    counter = 0
+    with open(fs.path(file_name), 'r') as csvfile:
+        reader = csv.DictReader(csvfile)
+        counter = 0
+        #return HttpResponse(reader)
+        #models.CustPermission.objects.all().delete()
+        for row in reader:
+            if row['perm_name'] and row['perm_desc'] :
+                radio=False
+                if row['radio']:
+                    if int(row['radio']) == 1:
+                        radio=True
+
+                if CustPermission.objects.filter(perm_name__iexact=row['perm_name']).exists():
+
+                    CustPermission.objects.filter(perm_name__iexact=row['perm_name']).update(
+                        perm_name=row['perm_name'],
+                        perm_desc=row['perm_desc'],
+                    )
+                else:
+                    CustPermission.objects.create(
+                    perm_name=row['perm_name'],
+                    perm_desc=row['perm_desc'],
+                   )
+                counter += 1
+        messages.success(request,'created permisions')
+        return redirect(reverse('permissions'))
+    return redirect(reverse('permissions'))
+

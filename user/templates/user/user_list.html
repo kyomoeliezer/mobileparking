@@ -2,7 +2,8 @@
 
         {% extends 'setting/setting_layout.html' %}
         {% block setting_block %}
-
+        {% load roles_tags %}
+        {%  is_admin request.user as am_admin %}
                 <div class="table-responsive">
                                     <div class="table-responsive">
                                      <table class="table tbl table-bordered">
@@ -28,11 +29,13 @@
                                                 <td>{{li.mobile}}</td>
                                                 <td>{{li.role.name}}</td>
                                                 <td> <a href=""><i class="fa fa-th-large"></i> </a></td>
+                                                {% if am_admin %}
 
                                                 <td>
                                                      <a href="{% url 'update_user' pk=li.id %}">  <i class="fa fa-edit"></i></a>
                                                     <a href="{% url 'delete_user' pk=li.id %}">  <i class="fa fa-trash"></i></a>
                                                 </td>
+                                                {% endif %}
 
                                             </tr>
                                             {% endfor %}

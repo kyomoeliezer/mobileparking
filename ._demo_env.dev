@@ -31,12 +31,11 @@ DJANGO_SU_NAME=demo@victoria.co.tz
 DJANGO_SU_EMAIL=demo@victoria.co.tz
 DJANGO_SU_PASSWORD=123
 
-#####EMAIL CONNECTOR SETTINGS
-EMAIL_HOST=mail.victoriafinance.co.tz
-EMAIL_PORT=587
-EMAIL_HOST_USER=middleware@victoriafinance.co.tz
-EMAIL_HOST_PASSWORD=neHFeXb!ec1p
-EMAIL_USE_TLS=True
+###EMAILSETTINGS
+EMAIL_HOST='smtp.gmail.com'
+EMAIL_HOST_USER='mifumotz2023@gmail.com'
+EMAIL_HOST_PASSWORD='seio ftxp snmc ltoy'
+DEFAULT_FROM_EMAIL='CAPTURE SOTWARE(G4)<mifumotz2023@gmail.com>'
 
 ####DNB
 ####DNB_USER=VICTORIA00HQ039
