@@ -90,6 +90,7 @@ class ReportParkingList(LoginRequiredMixin,View):
                 noOfParking=Count('parkingbill_id'),
                 sumParkingBill=Sum('paidAmount')
             )
+            return render(request, self.template_name_list, context)
         return render(request,self.template_name,context)
 
 
