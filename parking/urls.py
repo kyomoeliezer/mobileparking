@@ -19,6 +19,8 @@ urlpatterns=[
     url(r'^testImage', RecognizePlate.as_view(),name='testData'),
 
     url(r'^currentParking$', CurrentParkingList.as_view(),name='parking_lists'),
+    url(r'^report', ReportParkingList.as_view(),name='parking_report'),
+
     url(r'^$', BillingDashboard.as_view(),name='dashboard'),
 
 

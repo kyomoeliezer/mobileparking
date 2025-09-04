@@ -61,7 +61,7 @@ class ReportParkingList(LoginRequiredMixin,View):
     model = Parking
     context_object_name = 'lists'
     template_name = 'parking/report/form.html'
-    template_name_list = 'parking/report/billed_sum.html'
+    template_name_list = 'parking/report/list_sum.html'
 
     def get(self,request,*args, **kwargs):
         context = {}

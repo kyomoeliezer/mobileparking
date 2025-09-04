@@ -1,0 +1,96 @@
+
+
+        {% extends 'parking/parking_data_layout.html' %}
+        {% load crispy_forms_tags %}
+        {% load humanize %}
+        {% block setting_block %}
+        {% load roles_tags %}
+        {%  is_admin  request.user as am_admin %}
+        {%  is_account  request.user as am_account %}
+
+        <div class="col-md-12">
+          <div style="padding:12px;">
+            <table class="table">
+              <tr>
+                <th>BILLED CARS</th>
+                <th>{% if listsum.noOfParking %} {{listsum.noOfParking}} {% else %} 0 {% endif %}</th>
+              </tr>
+              <tr>
+                <th>PAID AMOUNT</th>
+                <th>{% if listsum.sumParkingBill %} {{listsum.sumParkingBill}} {% else %} 0 {% endif %}</th>
+              </tr>
+            </table>
+          </div>
+        </div>
+        <div class="col-md-12">
+                    <div class="table-responsive">
+                                    <div class="table-responsive">
+                                     <table class="table tbl table-bordered">
+                                      <thead>
+                                            <tr>
+                                               <th>SN</th>
+                                                <th>Plate No</th>
+                                                 <th>Arrived At</th>
+                                                <th>Billed At</th>
+
+                                                <th>Paid Amount</th>
+
+
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                                {% for li in lists %}
+                                            <tr>
+                                                <th scope="row">{{forloop.counter}}</th>
+                                                <td>{{li.parkingbill.parking.cardName}}</td>
+                                                <td>{{li.parkingbill.parking.created_on}}</td>
+                                                <td>{{li.parkingbill.created_on}}</td>
+                                               <td>{{li.paidAmount}}</td>
+
+
+
+                                            </tr>
+                                            {% endfor %}
+                                            </tbody>
+                                  </table>
+                                </div>
+                                </div>
+                </div>
+
+               {% endblock %}
+
+               {% block js %}
+              <script type="text/javascript">
+                $(document).ready(function() {
+                    $('.tbl').DataTable( {
+                    destroy: true,
+                    ordering:false,
+
+                    dom: 'Bfrtip',
+
+                    buttons: [
+                       {
+                                text: '+New',
+                                className: 'orange, btn btn-primary',
+                                 action: function (e, dt, node, config)
+                                    {
+                                     window.location.href = "{% url 'new_parking' %}";
+
+                                    }
+                            }
+
+                    ]
+                } );
+                });
+            </script>
+            {% endblock %}
+
+
+
+
+
+
+
+
+
+
