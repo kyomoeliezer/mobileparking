@@ -19,10 +19,10 @@
                                 <form class="forms-sample" method="post">{% csrf_token %}
                                             <div class="form-row">
                                                 <div class="col-md-4">
-                                                  {{form.start_date|as_crispy_field}}
+                                                  {{form.fromdate|as_crispy_field}}
                                                 </div>
                                               <div class="col-md-4">
-                                                  {{form.end_date|as_crispy_field}}
+                                                  {{form.todate|as_crispy_field}}
                                                 </div>
                                             </div>
 
