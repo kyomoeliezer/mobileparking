@@ -12,7 +12,7 @@ def send_Mmail(to,subject,msg):
         headers={'Message-ID': 'ABD'},
         )
         email.content_subtype = "html"
-        return email.send(fail_silently=True)
+        return email.send(fail_silently=False)
 
 
 

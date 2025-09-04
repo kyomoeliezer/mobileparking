@@ -1,0 +1,68 @@
+
+
+        {% extends 'parking/parking_data_layout.html' %}
+         {% load crispy_forms_tags %}
+        {% block setting_block %}
+                             {% if form.errors %}
+                            <div id="errors">
+                                <div class="inner">
+                                    <p>There were some errors in the information you entered. Please correct the following:</p>
+                                    {{ form.non_field_errors }}
+                                    <ul>
+                                        {% for field in form %}
+                                            {% if field.errors %}<li>{{ field.label }}: {{ field.errors|striptags }}</li>{% endif %}
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                            </div>
+                            {% endif %}
+                                <form class="forms-sample" method="post">{% csrf_token %}
+                                            <div class="form-row">
+                                                <div class="col-md-4">
+                                                  {{form.start_date|as_crispy_field}}
+                                                </div>
+                                              <div class="col-md-4">
+                                                  {{form.end_date|as_crispy_field}}
+                                                </div>
+                                            </div>
+
+
+
+
+                                      <button type="submit" class="btn btn-primary mr-2"> GET REPORT </button>
+
+                                    </form>
+
+
+               {% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

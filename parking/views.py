@@ -55,6 +55,42 @@ class BillingDashboard(LoginRequiredMixin,View):
         return render(request,self.template_name,context)
 
 
+class ReportParkingList(LoginRequiredMixin,View):
+    redirect_field_name = 'next'
+    login_url = reverse_lazy('login_user')
+    model = Parking
+    context_object_name = 'lists'
+    template_name = 'parking/report/form.html'
+    template_name_list = 'parking/report/billed_sum.html'
+
+    def get(self,request,*args, **kwargs):
+        context = {}
+
+        context['form']=SeachData
+
+        context['header'] = ' PARKING REPORT'
+
+        #return HttpResponse(context)
+
+        return render(request,self.template_name,context)
+
+    def post(self,request,*args, **kwargs):
+        context = {}
+        start_date=request.POST.get('fromdate')
+        end_date = request.POST.get('todate')
+        car = request.POST.get('cardName')
+        print('car')
+        print(car)
+        context['form']=SeachData
+
+        if start_date:
+            context['header'] = 'Report from  ' +str(start_date)+' to '+str(end_date)
+            context['lists'] = Payment.objects.filter(parkingbill__parking__created_on__gte=start_date,parkingbill__parking__created_on__lte=end_date).order_by('-created_on')
+            context['listsum'] = Payment.objects.filter(parkingbill__parking__created_on__gte=start_date,parkingbill__parking__created_on__lte=end_date).aggregate(
+                noOfParking=Count('parkingbill_id'),
+                sumParkingBill=Sum('paidAmount')
+            )
+        return render(request,self.template_name,context)
 
 
 
