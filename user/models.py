@@ -3,6 +3,7 @@ from django.db import models
 from django.conf import settings
 from django.core.files.storage import FileSystemStorage
 import random as r
+from auditlog.registry import auditlog
 from django.db import models
 from django.contrib.auth.models import AbstractUser,AbstractBaseUser
 from parking.models import BaseDB
@@ -21,6 +22,9 @@ class Role(models.Model):
     perm=models.ManyToManyField(CustPermission)
     def __str__(self):
         return self.name
+
+auditlog.register(Role)
+auditlog.register(CustPermission)
 
 
 

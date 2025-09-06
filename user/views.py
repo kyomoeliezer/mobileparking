@@ -423,7 +423,7 @@ class CreateFeeSetting(LoginRequiredMixin,CreateView):
     redirect_field_name = 'next'
     login_url = reverse_lazy('login_user')
     model = TimeSettings
-    fields = ['chargeAmount','minimumTime','maximumTime']
+    fields = ['chargeAmount','hours']
     template_name ='setting/new_fee_settings.html'
     context_object_name = 'form'
     header='New Settings'
@@ -441,7 +441,7 @@ class UpdateFeeSettings(LoginRequiredMixin,UpdateView):
     login_url = reverse_lazy('login_user')
 
     model = TimeSettings
-    fields = ['chargeAmount','minimumTime','maximumTime']
+    fields = ['chargeAmount','hours']
     template_name ='setting/new_fee_settings.html'
     context_object_name = 'form'
     header='Fee Settings'

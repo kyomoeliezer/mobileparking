@@ -2,6 +2,13 @@
 
         {% extends 'setting/setting_data_layout.html' %}
         {% block setting_block %}
+        {% load parking_tags %}
+        {% load roles_tags %}
+        {%  is_admin  request.user as am_admin %}
+        {%  is_account  request.user as am_account %}
+        {% time_setting_exists as time_setting_exists1 %}
+        {% time_setting_exist_more as time_setting_exist_more2 %}
+
 
                 <div class="table-responsive">
                                     <div class="table-responsive">
@@ -9,9 +16,8 @@
                                       <thead>
                                             <tr>
                                                <th>SN</th>
-                                                <th>Min Minutes</th>
-                                                 <th>Max Minutes</th>
-                                                <th>Charged Amount</th>
+                                                <th>EVERY(HOUR)</th>
+                                                <th>CHARGED AMOUNT</th>
 
                                                 <th>ACTION</th>
 
@@ -21,13 +27,17 @@
                                                 {% for li in lists %}
                                             <tr>
                                                 <th scope="row">{{forloop.counter}}</th>
-                                                <td>{{li.minimumTime}}</td>
-                                                <td>{{li.maximumTime}}</td>
+                                                <td>{{li.hours}}</td>
                                                 <td>{{li.chargeAmount}}</td>
 
                                                 <td>
-                                                     <a href="{% url 'update_fee_settings' pk=li.id %}">  <i class="fa fa-edit"></i></a>
+                                                    {% if am_admin %}
+
+                                                    <a href="{% url 'update_fee_settings' pk=li.id %}">  <i class="fa fa-edit"></i></a>
+                                                    {% if  time_setting_exist_more2 %}
                                                     <a href="{% url 'delete_fee_settings' pk=li.id %}">  <i class="fa fa-trash"></i></a>
+                                                    {% endif %}
+                                                    {% endif %}
                                                 </td>
 
                                             </tr>
@@ -48,6 +58,9 @@
                     dom: 'Bfrtip',
 
                     buttons: [
+
+                    {% if am_admin %}
+                    {% if not time_setting_exists1 %}
                        {
                                 text: '+New',
                                 className: 'orange, btn btn-primary',
@@ -57,6 +70,8 @@
 
                                     }
                             }
+                       {% endif %}
+                       {% endif %}
 
                     ]
                 } );

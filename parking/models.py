@@ -1,6 +1,7 @@
 from xmlrpc.client import boolean
 from django.db import models
 from django.utils.timezone import localtime
+from auditlog.registry import auditlog
 import uuid
 
 # Create your models here.
@@ -29,8 +30,9 @@ class BaseDB(models.Model):
 
 class TimeSettings(BaseDB):
     chargeAmount=models.FloatField()
-    minimumTime=models.FloatField()
-    maximumTime=models.FloatField()
+    minimumTime=models.FloatField(null=True)
+    maximumTime=models.FloatField(null=True)
+    hours=models.FloatField( null=True,verbose_name='Number of hours')
     def __str__(self):
         return str(self.minimumTime)+'-'+str(self.maximumTime)+'-'+str(self.chargedAmount)
 
@@ -64,6 +66,7 @@ class Payment(BaseDB):
     def __str__(self):
         return self.paidAmount
 
+
 class ParkingRequestLog(models.Model):
     created_on = models.DateTimeField(auto_now_add=True)
     method = models.CharField(max_length=50, null=True)
@@ -74,3 +77,10 @@ class ParkingRequestLog(models.Model):
 
     def __str__(self):
         return self.method
+#auditlog.register(ParkingRequestLog)
+auditlog.register(Payment)
+auditlog.register(ParkingBill)
+auditlog.register(Parking)
+auditlog.register(TimeSettings)
+
+

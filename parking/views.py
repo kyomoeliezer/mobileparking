@@ -1,5 +1,5 @@
 import datetime
-
+import math
 from django.utils.decorators import method_decorator
 from user.decorators import *
 from django.views.generic import CreateView,ListView,UpdateView,View,FormView,DeleteView
@@ -171,15 +171,16 @@ def create_bill(request,parkingId):
     nowTime = datetime.datetime.now()
     dataParking = Parking.objects.filter(id=parkingId).first()
     if not ParkingBill.objects.filter(parking_id=dataParking.id).exists():
-        dataTime = round(
+        dataTime1 = round(
             (nowTime - dataParking.created_on).total_seconds() / 60)
-        if TimeSettings.objects.filter(minimumTime__lte=dataTime, maximumTime__gte=dataTime).exists():
-            obj = \
-            TimeSettings.objects.filter(minimumTime__lte=dataTime, maximumTime__gte=dataTime).order_by('-created_on')[0]
+        dataTime=dataTime1/60
+        if TimeSettings.objects.filter(hours__isnull=False).exists():
+            obj =timeSett=TimeSettings.objects.filter(hours__isnull=False).order_by('-created_on')[0]
+            chargeAmount=math.ceil(dataTime/obj.hours)*obj.chargeAmount
             ParkingBill.objects.create(
                 parking=dataParking,
-                timespentInMinutes=dataTime,
-                billedAmount=obj.chargeAmount
+                timespentInMinutes=dataTime1,
+                billedAmount=chargeAmount
             )
         else:
             messages.warning(request, 'Please the time setting for this is not available ' + str(dataTime))
@@ -383,4 +384,7 @@ class RecognizePlate(View):
             for match in candidate.matches:
                 print(f"Plate: {match.text}")
                 print(f"Confidence: {match.confidence:.3f}")
+
+
+
 

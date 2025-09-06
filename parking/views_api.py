@@ -157,8 +157,12 @@ class ParkingApi:
                     created_on =nowTime,
                     cardName=vehicleNo
                 )
-                dataf=Parking.objects.filter(no__isnull=False).first()
-                if dataf:
+                dataf=Parking.objects.first()
+                firstData=Parking.objects.filter(no__gt=0).first()
+                print(firstData)
+                if firstData:
+                    no = Parking.objects.filter(no__gt=0).latest('created_on').no
+                    print('currentNo'+str(no))
                     no=no+1
                 else:
                     no=1
